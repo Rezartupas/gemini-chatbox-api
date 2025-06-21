@@ -11,12 +11,8 @@ form.addEventListener('submit', function (e) {
   appendMessage('user', userMessage);
   input.value = '';
 
-  setTimeout(() => {
-    appendMessage('bot', 'Thinking...');
-  }
-, 1000); // Simulate thinking time
+  const botMessageElement = appendMessage('bot', 'Gemini is thinking...');
 
-  // Send message to the backend API
   fetch('/api/chat', {
     method: 'POST',
     headers: {
@@ -26,16 +22,16 @@ form.addEventListener('submit', function (e) {
   })
     .then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Network response was not ok');
       }
       return response.json();
     })
     .then(data => {
-      appendMessage('bot', data.reply);
+      botMessageElement.textContent = data.reply;
     })
     .catch(error => {
-      console.error('Error fetching from API:', error);
-      appendMessage('bot', 'Sorry, something went wrong. Please try again.');
+      console.error('Error:', error);
+      botMessageElement.textContent = 'Sorry, something went wrong. Please try again.';
     });
 });
 
@@ -45,4 +41,5 @@ function appendMessage(sender, text) {
   msg.textContent = text;
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
+  return msg;
 }
