@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = genAI.getGenerativeModel({ model: 'models/gemini-2.0-flash' });
 
 app.post('/api/chat', async (req, res) => {
     const userMessage = req.body.message;
@@ -32,5 +32,5 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Gemini Chatbot running on http://localhost:${port}`);
-});
+    console.log(`Server running on ${port}`)
+})
